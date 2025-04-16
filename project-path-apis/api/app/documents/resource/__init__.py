@@ -1,0 +1,2 @@
+from app.documents.resource.documentlist import ProjectDocumentsResource
+from app.documents.resource.upload import UploadDocumentsResource

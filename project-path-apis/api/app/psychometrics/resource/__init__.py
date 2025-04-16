@@ -1,0 +1,2 @@
+from app.psychometrics.resource.psychometrics import PsychometricsResource
+from app.psychometrics.resource.psychometrictypes import PsychometricsTypesResource

@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  projectpath_api:
+    container_name: ppapineo   
+    restart: always
+    build: 
+      context: ./api
+      args:
+        - DECRYPTKEY
+    networks:
+      - projectpath-inet
+    environment:
+      - SERVER_TYPE
+    ports:
+      - "8025:5000"
+    command: gunicorn -w 1 -b :5000 manage:application 
+
+  projectpath_workers:
+    volumes:
+      - /dev/shm:/dev/shm
+    restart: always
+    networks:
+      - projectpath-inet
+    build: 
+      context: ./workers
+      args:
+        - DECRYPTKEY
+    command: celery -A tasks worker --loglevel=DEBUG --pool=threads --concurrency=2
+  
+  projectpath_beat:
+    container_name: docextractor-beat
+    networks:
+      - projectpath-inet
+    restart: always
+    build: 
+      context: ./workers
+      args:
+        - DECRYPTKEY
+    command: celery -A tasks beat --loglevel=info
+
+networks:
+  projectpath-inet:
+    external: true
+
+  
+
+
+  
